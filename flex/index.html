@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex布局</title>
+    <style>
+        .flex{
+            display:flex;
+            flex-direction:column-reverse; 
+            flex-wrap:nowrap;
+            flex-flow: row wrap;
+            justify-content:space-around;
+            align-items:baseline;
+            align-content:center;
+        }
+        .flex>li{
+            width:50px;
+            height:50px;
+            background-color: blue;
+            list-style: none;
+            order:0;
+            flex-shrink: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <ul class="flex">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+    </ul>
+</body>
+</html>

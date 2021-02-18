@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue</title>
+    <script src="js/vue.min.js"></script>
+</head>
+<body>
+    <div id="vue_det">
+        <h1>site:{{site}}</h1>
+        <h1>url:{{url}}</h1>
+        <h1>alexa:{{alexa}}</h1>
+        <h1>name:{{message.name}}</h1>
+        <h1>{{details()}}</h1>
+        <div v-html="message1"></div>
+        <div v-bind:class="{'class1':use}">{{site}}</div>
+        {{5+5}}<br>
+        {{ ok ? 'YES' : 'NO' }}<br>
+        {{message2.split('').reverse().join('')}}
+        <div v-bind:id="'list-'+id">菜鸟教程</div>
+        <p v-if="seen">现在你看到我了</p>
+        <input type="text" v-model="message2"/>
+        <button v-on:click="reverseMessage">反转字符串</button><br>
+        {{ message2 | capitalize }}<br>
+        <a :href="url">点这里</a><br>
+        <a @click="doSomething">点这里</a>
+    </div>
+</body>
+<script>
+    var data = {
+        name:"admin",
+        age:"99"
+    };
+    var vm = new Vue({
+        el:"#vue_det",
+        data:{
+            site:"菜鸟",
+            url:"www.cainiao.cn",
+            alexa:"1000",
+            message:data,
+            message1:'<h1>菜鸟教程</h1>',
+            use:true,
+            ok:true,
+            message2:'verygentleman',
+            id:1,
+            seen:true,
+        },
+        methods:{
+            details:function(){
+                return this.site+"-就是菜!"
+            },
+            reverseMessage:function(){
+                this.message2 = this.message2.split('').reverse().join('')
+            },
+            doSomething:function(){
+                alert("点这里也没用啊");
+            }
+        },
+        filters:{
+            capitalize:function(value){
+                if(!value) return '';
+                value = value.toString();
+                return value.charAt(0).toUpperCase()+value.slice(1);
+            }
+        }
+    });
+    document.write(document.baseURI);   
+</script>
+<script>
+   //鼠标点击出现爱心特效
+		(function(window,document,undefined){
+			var hearts = [];
+			window.requestAnimationFrame = (function(){
+				return window.requestAnimationFrame ||
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				window.oRequestAnimationFrame ||
+				window.msRequestAnimationFrame ||
+				function (callback){
+					setTimeout(callback,1000/60);
+				}
+			})();
+			init();
+			function init(){
+				css(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: absolute;}.heart:after{top: -5px;}.heart:before{left: -5px;}");
+				attachEvent();
+				gameloop();
+			}
+			function gameloop(){
+				for(var i=0;i<hearts.length;i++){
+					if(hearts[i].alpha <=0){
+						document.body.removeChild(hearts[i].el);
+						hearts.splice(i,1);
+						continue;
+					}
+					hearts[i].y--;
+					hearts[i].scale += 0.004;
+					hearts[i].alpha -= 0.013;
+					hearts[i].el.style.cssText = "left:"+hearts[i].x+"px;top:"+hearts[i].y+"px;opacity:"+hearts[i].alpha+";transform:scale("+hearts[i].scale+","+hearts[i].scale+") rotate(45deg);background:"+hearts[i].color;
+				}
+				requestAnimationFrame(gameloop);
+			}
+			function attachEvent(){
+				var old = typeof window.onclick==="function" && window.onclick;
+				window.onclick = function(event){
+					old && old();
+					createHeart(event);
+				}
+			}
+			function createHeart(event){
+				var d = document.createElement("div");
+				d.className = "heart";
+				hearts.push({
+					el : d,
+					x : event.clientX - 5,
+					y : event.clientY - 5,
+					scale : 1,
+					alpha : 1,
+					color : randomColor()
+				});
+				document.body.appendChild(d);
+			}
+			function css(css){
+				var style = document.createElement("style");
+				style.type="text/css";
+				try{
+					style.appendChild(document.createTextNode(css));
+				}catch(ex){
+					style.styleSheet.cssText = css;
+				}
+				document.getElementsByTagName('head')[0].appendChild(style);
+			}
+			function randomColor(){
+				return "rgb("+(~~(Math.random()*255))+","+(~~(Math.random()*255))+","+(~~(Math.random()*255))+")";
+			}
+		})(window,document);
+</script>
+</html>

@@ -1,0 +1,44 @@
+*{
+    margin:0;
+    padding:0;
+}
+ul li,ol{
+    list-style:none;
+}
+.banners{
+    position:relative;
+    width:680px;
+    height:286.5px;
+    margin:auto;
+    padding:auto;
+}
+.banner{
+    position:relative;
+    width:680px;
+    height:286.5px;
+}
+.banner>li{
+    position:absolute;
+    top:0;
+    left: 0;
+    display:none;
+}
+.banner>.show{
+    display:block;
+}
+.dots{
+    position:absolute;
+    bottom:10px;
+    left:50%;
+    margin-left: -18px;
+}
+.dots>span{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    background-color:rgb(252, 96, 57);
+    border-radius:100%;
+}
+.dots>.active{
+    background-color: rgb(56, 245, 71);
+}

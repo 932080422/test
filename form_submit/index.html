@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form_submit</title>
+</head>
+<body>
+    <form method="post">
+        <div>
+            <label>姓名：</label>
+            <input type="text" value="admin" name="name"/>
+        </div>
+        <div>
+            <label>密码：</label>
+            <input type="password" value="1234" name="pwd"/>
+        </div>
+        <div>
+            <button id="register">注册</button>
+        </div>
+    </form>
+</body>
+<script>
+    let register = document.getElementById("register");
+    let link = true;
+    register.addEventListener("click",function(){
+            //后台操作
+            let obj = new XMLHttpRequest();//创建XMLHttpRequset异步对象
+            obj.onreadystatechange = callback ; //设置回调函数
+            obj.open("post","index.php",true);//使用open()与服务器建立连接
+            obj.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            obj.send("name=admin&pwd=1234");//向服务器发送数据
+            function callback(){
+                //判断异步对象的状态
+                if(obj.readyState == 4){
+                    //判断交互是否成功
+                    if(obj.status == 200){
+                        alert(2);
+                        //获取服务器响应的数据
+                        let data = obj.responseText;
+                        //解析数据
+                        data = JSON.parse(data);
+                    }
+                }
+            }
+            alert(1);
+        return false;
+    },false);
+</script>
+</html>

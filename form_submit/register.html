@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+</head>
+<script src="jquery-3.5.1.min.js"></script>
+<style>
+    *{
+        margin:0 ;
+        padding:0;
+        font-size:14px;
+        box-sizing: border-box;
+    }
+    ul,ol,li{
+        list-style: none;
+    }
+    .dd{
+        margin: auto;
+        padding: auto;
+        width:600px;
+    }
+    .off{
+        display: none;
+    }
+    .register{
+        width:auto;
+    }
+    .register>div{
+        display: flex;
+        /*flex-flow: row nowrap;*/
+        margin:20px 0;
+        /*justify-content:center;*/
+        /*width:500px;*/
+    }
+    .register>div>label{
+        width: 100px;
+        /*flex-grow: 1;*/
+        text-align: right;
+        line-height:35px;
+    }
+    .register>div>input{
+        width:400px;
+        height:35px;
+        margin-left: 20px;
+    }
+    .top{
+        width:400px;
+        height:35px;
+        position: relative;
+        margin-left: 20px;
+    }
+    .top>input{
+        position: absolute;
+        top:50%;
+        margin-top:-12.5px;
+    }
+    .top>span,.register>div>span{
+        line-height:35px;
+        margin-left: 20px;
+        color:red;
+    }
+    .btn{
+        width:80px;
+        height:35px;
+        outline: none;
+        border:0;
+        background-color:#000;
+        color:#fff;
+    }
+    .btn:hover{
+        opacity:0.6;
+    }
+    .register-title{
+        font-size:24px;
+    }
+    .top-img{
+        width:35px;
+        height:35px;
+        margin-right:20px;
+    }
+    .strengthLv0 {
+        margin:8px 0 0 20px;
+        height: 20px;
+        width: 120px;
+        border: 1px solid #ccc;
+        padding: 2px;
+    }
+
+    .strengthLv1 {
+        margin:8px 0 0 20px;
+        background: red;
+        height: 20px;
+        width: 40px;
+        border: 1px solid #ccc;
+        padding: 2px;
+    }
+
+    .strengthLv2 {
+        margin:8px 0 0 20px;
+        background: orange;
+        height: 20px;
+        width: 80px;
+        border: 1px solid #ccc;
+        padding: 2px;
+    }
+
+    .strengthLv3 {
+        margin:8px 0 0 20px;
+        background: green;
+        height: 20px;
+        width: 120px;
+        border: 1px solid #ccc;
+        padding: 2px;
+    }
+    .password_strength{
+        overflow: hidden;
+        margin-left: 20px;
+        width:400px;
+        display: flex;
+    }
+    .password_strength>span{
+        margin-top:7.5px;
+        display: inline-block;
+        flex: 1;
+        height:20px;
+        text-align: center;
+        color:black;
+    }
+    .password_strength>span.selected{
+        background-color:#FF827A;
+        color:#fff;
+    }
+</style>
+<body>
+<form method="post" action="/index.php/index/index/register" class="register" id="register">
+    <h2 class="register-title">注册</h2>
+    <div>
+        <label>头像：</label>
+        <div class="top">
+            <img src="" class="top-img" id="top-img" style="display:none;"/>
+            <input type="file" name="url" onchange="fileChange(this)"/>
+        </div>
+        <span id="urlLink"></span>
+    </div>
+    <div>
+        <label>登录名：</label>
+        <input type="text" name="name" onblur="verifyName()" value="admin"/>
+        <span id="nameLink"></span>
+    </div>
+    <div>
+        <label>真实姓名：</label>
+        <input type="text" name="realName" onblur="verifyRealName()" value="管理员"/>
+        <span id="realLink"></span>
+    </div>
+    <div>
+        <label>密码：</label>
+        <input type="password" name="password" onblur="verifyPassword()" value="1234" onkeyup="pwd(this)"/>
+        <span id="passwordLink"></span>
+    </div>
+    <div id="pwdLength">
+        <label>密码强度：</label>
+        <div class="password_strength">
+            <span class="selected">弱</span>
+            <span>中</span>
+            <span>强</span>
+        </div>
+    </div>
+    <div>
+        <label>重复密码：</label>
+        <input type="password" name="rePassword" onblur="verifyRePassword()" value="1234"/>
+        <span id="rePasswordLink"></span>
+    </div>
+    <div>
+        <label>地址：</label>
+        <input type="text" name="address" onblur="verifyAddress()" value="重庆"/>
+        <span id="addressLink"></span>
+    </div>
+    <div>
+        <label>手机：</label>
+        <input type="text" name="telephone" onblur="verifyTelephone()" value="18716424957"/>
+        <span id="telephoneLink"></span>
+    </div>
+    <div>
+        <label>身份证：</label>
+        <input type="text" name="idNumber" onblur="verifyIdNumber()" value="500384198705146547"/>
+        <span id="idNumberLink"></span>
+    </div>
+    <div>
+        <label>邮箱：</label>
+        <input type="text" name="email" onblur="verifyEmail()" value="932080422@qq.com"/>
+        <span id="emailLink"></span>
+    </div>
+    <button class="btn">注册</button>
+    <div>
+        <p>已有账号，<a href="/index.php/index/index/login">登录</a></p>
+    </div>
+</form>
+
+</body>
+<script>
+    //验证头像并预览头像
+    var fileChange = function(e){
+        var reader = new FileReader();// 读取文件
+        reader.readAsDataURL(e.files[0]);
+        reader.onload = function() {   // 监听onload事件
+            // console.log(reader.result);
+            // 将读取的结果显示在页面中
+            $("#top-img").attr("style","display:inline-block");
+            $("#top-img").attr("src",reader.result);
+        };
+        if(validationRegExp.url.test(e.files[0].name)){
+            $("#urlLink").html("ok");
+            return true;
+        } else{
+            console.log("error");
+            $("#urlLink").html("*照片格式出错");
+            return false;
+        }
+    };
+    //验证密码强度
+    let pwd = function(e)
+    {
+        let value = e.value;
+        let link = 0;
+        //如果密码大于8位且同时包含数字，字母
+        if(/^(?=.*[0-9])(?=.*[a-zA-Z])(.{8,})$/.test(value)) {
+            link++;
+        }
+        //检查是否包含特殊字符
+        if(/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/.test(value)) {
+            link++;
+        }
+        let password_strength = document.getElementsByClassName("password_strength");
+        let tag = password_strength[0].childNodes;
+        //此时得到的tag包含空白字符，必须清除
+        let newTag = [];
+        for (var i = 0; i < tag.length; i++) {
+            if(!(tag[i].nodeType == '3' && tag[i].nodeName == '#text' && !/\S/.test(tag[i].nodeValue))){ //文本节点并且是空的文本节点时，将空文本节点删除
+                newTag.push(tag[i]) ;
+            }
+        }
+        //console.log(newTag);
+        findSub(newTag[link]);
+    }
+    //找兄弟节点，并去除selected
+    let findSub = function(tag)
+    {
+        let parent = tag.parentNode;
+        let childs = parent.childNodes;
+        tag.classList.add("selected");
+        for(let i = 0;i < childs.length ;i++) {
+            if(!(childs[i].nodeType == '3' && childs[i].nodeName == '#text' && !/\S/.test(childs[i].nodeValue) )){
+                //文本节点并且是空的文本节点时，将空文本节点删除
+                if(childs[i] != tag) {
+                    childs[i].classList.remove("selected");
+                }
+            }
+        }
+    }
+    //正则验证
+    var validationRegExp = {
+        telephone: /^((13\d)|(14[57])|(15\d)|(17\d)|(18\d)|(19[98]))(\d)(\d{3})(\d{4})$/,//号码验证
+        card: /^(\d{6})(((19)|(20))(\d{2}))((0[^0])|(1[12]))(([012]\d)|(3[01]))(\d{2})(\d)(\d|x)$/, //身份证验证
+        eamil: /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/,
+        password: /^[a-zA-Z0-9_]{4,16}$/,    //4-16位的英文，数字
+        name: /^[a-zA-Z0-9_]{4,16}$/,       //4-16位的英文，数字
+        realName:/^[\u4e00-\u9fa5]{2,4}$/,  //2-4个正文
+        address:/^[\u4e00-\u9fa5]{2,}$/,     //2个以上的中文
+        url:/\.(jpg|jpeg|png|bmp|BMP|JPG|PNG|JPEG)$/,   //验证文件格式
+    };
+    //验证登录名
+    var verifyName = function(){
+        var name = $("input[name='name']").val();
+        if(validationRegExp.name.test(name)){
+            $("#nameLink").html("ok");
+            return true;
+        } else{
+            console.log("error");
+            $("#nameLink").html("*登录名由字母和数字组合（4-9位）");
+            return false;
+        }
+    };
+    //验证真实姓名
+    var verifyRealName = function(){
+        var realName = $("input[name='realName']").val();
+        if(validationRegExp.realName.test(realName)){
+            $("#realLink").html("ok");
+            return true;
+        } else{
+            console.log("error");
+            $("#realLink").html("*中文（2-4位）");
+            return false;
+        }
+    };
+    //验证密码
+    var verifyPassword = function(){
+        var password = $("input[name='password']").val();
+        if(validationRegExp.password.test(password)){
+            $("#passwordLink").html("ok");
+            return true;
+        } else{
+            console.log("error");
+            $("#passwordLink").html("*字母和数字（4-16位）");
+            return false;
+        }
+    };
+    //验证重复密码
+    var verifyRePassword = function(){
+        var password = $("input[name='password']").val();
+        var rePassword = $("input[name='rePassword']").val();
+        if(password !== rePassword){
+            $("#rePasswordLink").html("*两次密码不一致");
+            return false;
+        }
+        if(validationRegExp.password.test(rePassword)){
+            $("#rePasswordLink").html("ok");
+            return true;
+        } else{
+            console.log("error");
+            $("#rePasswordLink").html("*字母和数字（4-16位）");
+            return false;
+        }
+    };
+    //验证地址
+    var verifyAddress = function(){
+        var address = $("input[name='address']").val();
+        if(validationRegExp.address.test(address)){
+            $("#addressLink").html("ok");
+            return true;
+        } else{
+            console.log("error");
+            $("#addressLink").html("*中文");
+            return false;
+        }
+    };
+    //验证手机
+    var verifyTelephone = function(){
+        var telephone = $("input[name='telephone']").val();
+        if(validationRegExp.telephone.test(telephone)){
+            $("#telephoneLink").html("ok");
+            return true;
+        } else{
+            $("#telephoneLink").html("*手机号码格式错误");
+            return false;
+        }
+    };
+    //验证身份证
+    var verifyIdNumber = function(){
+        var idNumber = $("input[name='idNumber']").val();
+        if(validationRegExp.card.test(idNumber)){
+            $("#idNumberLink").html("ok");
+            return true;
+        } else{
+            $("#idNumberLink").html("*身份证号码格式错误");
+            return false;
+        }
+    };
+    //验证邮箱
+    var verifyEmail = function(){
+        var email = $("input[name='email']").val();
+        if(validationRegExp.eamil.test(email)){
+            $("#emailLink").html("ok");
+            return true;
+        } else{
+            $("#emailLink").html("*邮箱号码格式错误");
+            return false;
+        }
+    };
+
+</script>
+</html>

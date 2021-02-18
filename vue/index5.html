@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="js/vue.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <runoob></runoob>
+        <runoob2></runoob2>
+        <bigs message="one"></bigs>
+        <smalls v-for="item in sites" v-bind:todo="item"></smalls>
+    </div>
+</body>
+<script>
+     //注册组件
+    Vue.component("runoob",{
+        template:'<h5>全局组件</h5>'
+    });
+    var child = {
+        'template':'<h5>局部组件</h5>'
+    };
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            sites:[
+                {text:'runoob'},
+                {text:'google'},
+                {text:'taobao'}
+            ],
+        },
+        components:{
+            'runoob2':child,
+            'bigs':{
+                props:['message'],
+                template:'<span>{{message}}</span>'
+            },
+            'smalls':{
+                props:['todo'],
+                'template':'<p>{{todo.text}}</p>'
+            },
+        },
+    });
+   
+</script>
+</html>

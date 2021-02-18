@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue2</title>  
+  <script src="js/vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div v-if="seen">hello</div>
+        <div v-else-if="type === 'A'">A</div>
+        <div v-else-if="type === 'B'">B</div>
+        <div v-else-if="type === 'C'">C</div>
+        <div v-else>sorry</div>
+        <div v-show="seen">SHOW</div>
+        <ul>
+            <li v-for="site in sites">
+                {{ site.name }}
+              </li>
+        </ul>
+        <ul>
+            <li v-for="value in object">{{value}}</li>
+        </ul>
+        <ul>
+            <li v-for="(value,key) in object">{{key+value}}</li>
+        </ul>
+        <ul>
+            <li v-for="(value,key,index) in object">{{index+key+value}}</li>
+        </ul>
+        <ul>
+            <li v-for="n in 4">{{n}}</li>
+        </ul>
+        <p>原始字符串：{{message}}</p>
+        <p>反转后的字符串：{{reversedMessage}}</p>
+    </div>
+    
+</body>
+<script>
+    var vue = new Vue({
+        el:"#app",
+        data:{
+            seen:true,
+            type:'A',
+            sites: [{ name: 'Runoob' },{ name: 'Google' },{ name: 'Taobao' }],
+            object:{
+                name:"admin",age:18,pwd:1234,
+            },
+            message:"verygentleman",
+        },
+        computed:{
+            reversedMessage:function(){
+                return this.message.split('').reverse().join('');
+            },
+            site:{
+                //getter
+                get:function(){
+                    return this.message+' '+this.type;
+                },
+                //setter
+                set:function(newValue){
+                    var message = newValue.split(' ');
+                    this.message = name[0];
+                }
+            },
+        }
+    });
+    //调用setter,vm.message会被更新
+    vm.site = '菜鸟教程 http://www.cainiao.com';
+</script>
+</html>
